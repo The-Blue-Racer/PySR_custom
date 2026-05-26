@@ -1627,6 +1627,21 @@ class PySRRegressor(MultiOutputMixin, RegressorMixin, BaseEstimator):
         # Immutable parameter validation
         # Ensure instance parameters are allowable values:
 
+        # This fork can be paired with a minimal Julia backend which may not ship
+        # optional extension support. Fail fast with a clear error.
+        if self.turbo:
+            raise ValueError(
+                "turbo=True is disabled in the minimal SymbolicRegression backend."
+            )
+        if self.bumper:
+            raise ValueError(
+                "bumper=True is disabled in the minimal SymbolicRegression backend."
+            )
+        if self.autodiff_backend is not None:
+            raise ValueError(
+                "autodiff_backend is disabled in the minimal SymbolicRegression backend."
+            )
+
         # Validate operators vs binary_operators/unary_operators mutual exclusion
         if self.operators is not None:
             if self.binary_operators is not None or self.unary_operators is not None:
